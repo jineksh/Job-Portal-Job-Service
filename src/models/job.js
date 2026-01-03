@@ -37,7 +37,7 @@ export default (sequelize, DataTypes) => {
       allowNull: false
     },
     work_location: {
-      work_location: DataTypes.ENUM('remote','on_site','hybrid'),
+      type: DataTypes.ENUM('remote', 'on_site', 'hybrid'),
       allowNull: false,
       comment: 'e.g., Remote, On-site, Hybrid'
     },
