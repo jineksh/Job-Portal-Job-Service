@@ -87,6 +87,40 @@ class companyService {
             );
         }
     }
+
+    async getCompanyDetails(id){
+        try {
+            const company = await this.repository.getCompanyDetails(id);
+            return company;
+        } catch (error) {
+            console.error('[companyService:getCompanyDetails]', error);
+            if (error instanceof ApiError) {
+                throw error;
+            }
+            throw new ApiError(
+                'Failed to fetch company details',
+                500,
+                error
+            );
+        }
+    }
+
+    async getAllCompanies(id){
+        try {
+            const allCompanies = await this.repository.getAllCompanies(id);
+            return allCompanies;
+        } catch (error) {
+             console.error('[companyService:getAllCompany]', error);
+            if (error instanceof ApiError) {
+                throw error;
+            }
+            throw new ApiError(
+                'Failed to fetch allCompanies',
+                500,
+                error
+            );
+        }
+    }
 }
 
 export default companyService;
