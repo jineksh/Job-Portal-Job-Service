@@ -1,3 +1,4 @@
+import { all, formToJSON } from "axios";
 import jobService from "../service/jobService.js";
 import ApiResponse from "../utils/apiResponse.js";
 
@@ -37,3 +38,37 @@ export const updateJob = async(req,res,next)=>{
         next(error);
     }
 }
+
+export const getSingleJob = async(req,res,next)=>{
+    try {
+        const {jobid} = req.params;
+        const job = await service.getSingleJob(parseInt(jobid));
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                job,
+                'job fetched successfully'
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getAllActiveJobs = async(req,res,next)=>{
+    try {
+        const {title,location} = req.query;
+        const allJobs = await service.getAllActiveJob(title,location);
+        console.log(allJobs)
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                allJobs,
+                'all active jobs fetched successfully'
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
