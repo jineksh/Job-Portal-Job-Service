@@ -24,6 +24,23 @@ class applicationService{
         }
     }
 
+    async getAllUserApplication(userId){
+        try {
+            const applications = await this.repository.getAllUserApplications(userId);
+            return applications;
+        } catch (error) {
+            console.error('[applicationService:getallApplication]', error);
+            if (error instanceof ApiError) {
+                throw error;
+            }
+            throw new ApiError(
+                'Failed to fetch all Applications',
+                500,
+                error
+            );
+        }
+    }
+
 
 }
 

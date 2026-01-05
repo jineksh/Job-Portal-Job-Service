@@ -17,3 +17,21 @@ export const createApplication = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getAllUserApplication = async (req,res,next)=>{
+    try {
+        const {id} = req.user;
+        const applicantions = await service.getAllUserApplication(id);
+
+        return res.status(200).json(
+            new ApiResponse(
+                201,
+                applicantions,
+                'applications fetched successfully'
+            )
+        );
+
+    } catch (error) {
+        next(error);
+    }
+}
