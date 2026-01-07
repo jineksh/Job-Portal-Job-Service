@@ -6,12 +6,14 @@ dotenv.config();
 export async function getUserById(userId) {
   const USER_SERVICE_URL = process.env.USER_SERVICE_URL// user service ka port
 
+  console.log(userId)
+
   const response = await axios.get(
-    `${USER_SERVICE_URL}/user/${userId}`
+    `${USER_SERVICE_URL}/${userId}`
   );
 
-  console.log(response.data);
+  console.log('From api Response',response.data.data);
 
-  return response.data;
+  return response.data.data;
 }
 

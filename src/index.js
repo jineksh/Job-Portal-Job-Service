@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import {PORT} from './config/server.js';
 import { errorMiddleware } from "./middleware/errorHandler.js";
 import ApiRoutes from './routes/index.js';
+import emailWorker from './workers/mail.js';
 dotenv.config();
 
 
@@ -12,6 +13,8 @@ app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
 app.use('/api',ApiRoutes);
+
+emailWorker('updateApplicationMailQueue');
 
 app.use(errorMiddleware);
 
