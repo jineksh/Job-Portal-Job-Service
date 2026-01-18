@@ -3,7 +3,8 @@ import { DatabaseError } from '../errors/index.js';
 import { where } from 'sequelize';
 import { Op } from 'sequelize'
 
-const { Job } = db;
+
+const { Job, Company } = db;
 
 
 class jobRepository {
@@ -66,35 +67,75 @@ class jobRepository {
             )
         }
     }
-    async getAllActiveJobs(title, location) {
+    async getAllActiveJobs(title, location, page = 1, limit = 6) {
         try {
+            // Offset calculation: Page 1 pe 0 skip, Page 2 pe 'limit' jitne skip
+            const offset = (page - 1) * limit;
+
             const query = {
                 where: {
-                    is_active: true // Ensure you only get active jobs
-                }
+                    is_active: true
+                },
+                include: [
+                    {
+                        model: Company,
+                        as: 'company',
+                        attributes: ['id', 'name', 'logo']
+                    }
+                ],
+                // Pagination fields
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                // Hamesha latest jobs upar dikhao
+                order: [['createdAt', 'DESC']]
             };
 
-            // Dynamically add search filters
+            // Dynamic filters logic same rahega
             if (title) {
                 query.where.title = { [Op.like]: `%${title}%` };
             }
+
             if (location) {
                 query.where.location = { [Op.like]: `%${location}%` };
             }
 
-            return await Job.findAll(query);
+            const { rows, count } = await Job.findAndCountAll(query);
+
+            return {
+                jobs: rows,
+                totalJobs: count,
+                totalPages: Math.ceil(count / limit),
+                currentPage: parseInt(page)
+            };
+
         } catch (error) {
             console.error('[getActiveJob]', error);
+            // ... error handling same
+        }
+    }
+
+
+    async getAllJobs() {
+        try {
+            const jobs = await Job.findAll({
+                include: [{
+                    model: Company,
+                    as: 'company',
+                    attributes: ['id', 'name', 'logo', 'website']
+                }]
+            });
+            return jobs;
+        } catch (error) {
+            console.error('[getAllJobs]', error);
             if (error instanceof DatabaseError) {
                 throw error;
             }
             throw new DatabaseError(
-                'Failed to fetch Job',
+                'Failed to fetch all jobs',
                 error
             )
         }
     }
-
 }
 
 export default jobRepository;

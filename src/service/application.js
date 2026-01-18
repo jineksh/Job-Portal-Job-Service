@@ -79,9 +79,16 @@ class applicationService {
             if (!application) {
                 throw new ApiError("Application does not exist", 400);
             }
-            const updateData = {
-                status: status
-            };
+            if (status === 'approve') {
+                var updateData = {
+                    status: 'approved'
+                };
+            }else if (status === 'reject') {
+                var updateData = {
+                    status: 'rejected'
+                };
+            }
+
 
             const updatedApplication = await this.repository.updateApplication(id, updateData);
 

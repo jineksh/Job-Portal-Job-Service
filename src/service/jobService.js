@@ -78,9 +78,9 @@ class jobService {
         }
     }
 
-    async getAllActiveJob(title,location){
+    async getAllActiveJob(title,location,page,limit){
         try {
-           const activeJobs = await this.repository.getAllActiveJobs(title,location);
+           const activeJobs = await this.repository.getAllActiveJobs(title,location,page,limit);
            return activeJobs; 
         } catch (error) {
             console.error('[jobService:getAllActiveJob]', error);
@@ -89,6 +89,23 @@ class jobService {
             }
             throw new ApiError(
                 'Failed to fetch all active job',
+                500,
+                error
+            );
+        }
+    }
+
+    async getAllJobs(){
+        try {
+           const allJobs = await this.repository.getAllJobs();
+              return allJobs;
+        } catch (error) {
+            console.error('[jobService:getAllJobs]', error);
+            if (error instanceof ApiError) {
+                throw error;
+            }
+            throw new ApiError(
+                'Failed to fetch all job',
                 500,
                 error
             );

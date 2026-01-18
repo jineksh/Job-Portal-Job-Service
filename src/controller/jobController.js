@@ -57,8 +57,8 @@ export const getSingleJob = async(req,res,next)=>{
 
 export const getAllActiveJobs = async(req,res,next)=>{
     try {
-        const {title,location} = req.query;
-        const allJobs = await service.getAllActiveJob(title,location);
+        const {title,location,page=1,limit = 6} = req.query;
+        const allJobs = await service.getAllActiveJob(title,location,parseInt(page),parseInt(limit));
         console.log(allJobs)
         return res.status(200).json(
             new ApiResponse(
@@ -71,4 +71,12 @@ export const getAllActiveJobs = async(req,res,next)=>{
         next(error);
     }
 }
+
+// export const getAllJobs = async(req,res,next)=>{
+//     try {
+        
+//     } catch (error) {
+        
+//     }
+// }
 
