@@ -20,6 +20,10 @@ app.use(cors({
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ limit: '20mb', extended: true }));
 
+app.get('/home',(req,res)=>{
+    res.send('Job Service is up and running');
+});
+
 app.use('/api',ApiRoutes);
 
 emailWorker('updateApplicationMailQueue');
